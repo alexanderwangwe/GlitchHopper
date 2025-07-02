@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class FragmentScore : MonoBehaviour
 {
-    [SerializeField] private TMPro.TMP_Text scoreBox; // directly reference TMP_Text
-    [SerializeField] private GameObject portal;
+    [SerializeField] private TMPro.TMP_Text scoreBox; // UI text element
+    [SerializeField] private GameObject portal;       // Portal GameObject
     public static int totalFragments = 0;
     private int targetFragments = 5;
 
@@ -20,7 +20,10 @@ public class FragmentScore : MonoBehaviour
             Debug.LogError("Portal GameObject is not assigned in the FragmentScore script.");
         }
 
-        portal.SetActive(false); // Ensure portal is initially inactive
+        if (portal != null)
+        {
+            portal.SetActive(false); // Hide portal at game start
+        }
     }
 
     void Update()
@@ -30,10 +33,15 @@ public class FragmentScore : MonoBehaviour
             scoreBox.text = "Fragments: " + totalFragments + "/" + targetFragments;
         }
 
+        // Activate portal when enough fragments collected
         if (!portalActivated && totalFragments >= targetFragments)
         {
             portalActivated = true;
-            portal.SetActive(true);
+
+            if (portal != null)
+            {
+                portal.SetActive(true);
+            }
         }
     }
 }

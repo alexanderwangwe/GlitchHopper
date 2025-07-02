@@ -6,6 +6,8 @@ public class FragmentControl : MonoBehaviour
     [SerializeField] private AudioSource fragmentCollect;
     [SerializeField] private int fragmentScore = 1;
 
+    
+
     private bool isCollected = false;
 
     void Update()
