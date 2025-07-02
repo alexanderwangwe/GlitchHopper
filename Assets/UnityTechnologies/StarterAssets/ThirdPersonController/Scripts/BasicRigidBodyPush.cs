@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 
 public class BasicRigidBodyPush : MonoBehaviour
 {
@@ -7,42 +6,30 @@ public class BasicRigidBodyPush : MonoBehaviour
 	public bool canPush;
 	[Range(0.5f, 5f)] public float strength = 1.1f;
 
-	private List<ControllerColliderHit> hits = new List<ControllerColliderHit>();
-
 	private void OnControllerColliderHit(ControllerColliderHit hit)
 	{
-		if (canPush)
-		{
-			// Save valid hits to process in FixedUpdate
-			if (hit.collider.attachedRigidbody != null && !hit.collider.attachedRigidbody.isKinematic)
-			{
-				hits.Add(hit);
-			}
-		}
-	}
-
-	private void FixedUpdate()
-	{
-		foreach (var hit in hits)
-		{
-			PushRigidBodies(hit);
-		}
-		hits.Clear(); // Clear after processing
+		if (canPush) PushRigidBodies(hit);
 	}
 
 	private void PushRigidBodies(ControllerColliderHit hit)
 	{
+		// https://docs.unity3d.com/ScriptReference/CharacterController.OnControllerColliderHit.html
+
+		// make sure we hit a non kinematic rigidbody
 		Rigidbody body = hit.collider.attachedRigidbody;
 		if (body == null || body.isKinematic) return;
 
+		// make sure we only push desired layer(s)
 		var bodyLayerMask = 1 << body.gameObject.layer;
 		if ((bodyLayerMask & pushLayers.value) == 0) return;
 
+		// We dont want to push objects below us
 		if (hit.moveDirection.y < -0.3f) return;
 
+		// Calculate push direction from move direction, horizontal motion only
 		Vector3 pushDir = new Vector3(hit.moveDirection.x, 0.0f, hit.moveDirection.z);
 
-		Vector3 newPosition = body.position + pushDir * strength * Time.fixedDeltaTime;
-		body.MovePosition(newPosition); // Smooth, stable movement
+		// Apply the push and take strength into account
+		body.AddForce(pushDir * strength, ForceMode.Impulse);
 	}
 }

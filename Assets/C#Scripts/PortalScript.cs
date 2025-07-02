@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 public class PortalTrigger : MonoBehaviour
 {
     [SerializeField] private GameObject levelCompleteUI; // UI canvas or panel
-    [SerializeField] private string nextSceneName = "Level3";
+    [SerializeField] private string nextSceneName = "Level2";
 
     private bool canTeleport = true;
 
