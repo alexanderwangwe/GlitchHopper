@@ -6,14 +6,18 @@ public class IntroPopup : MonoBehaviour
 
     void Start()
     {
-        instructionPanel.SetActive(true); // Show instructions
+        // Show instructions and pause the game
+        instructionPanel.SetActive(true);
+        Time.timeScale = 0f; // Freeze everything
     }
 
     void Update()
     {
         if (instructionPanel.activeSelf && Input.GetKeyDown(KeyCode.Space))
         {
-            instructionPanel.SetActive(false); // Hide when space is pressed
+            // Hide instructions and unpause the game
+            instructionPanel.SetActive(false);
+            Time.timeScale = 1f; // Resume game
         }
     }
 }

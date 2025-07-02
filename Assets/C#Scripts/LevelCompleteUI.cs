@@ -6,7 +6,16 @@ public class LevelCompleteUI : MonoBehaviour
     public void LoadNextLevel()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("Level2");
+        int nextIndex = SceneManager.GetActiveScene().buildIndex + 1;
+
+        if (nextIndex < SceneManager.sceneCountInBuildSettings)
+        {
+            SceneManager.LoadScene(nextIndex);
+        }
+        else
+        {
+            Debug.Log("No more levels.");
+        }
     }
 
     public void ReplayLevel()
@@ -18,6 +27,6 @@ public class LevelCompleteUI : MonoBehaviour
     public void LoadMainMenu()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("Menu");
+        SceneManager.LoadScene("MainMenu"); // Change to your actual menu name
     }
 }
